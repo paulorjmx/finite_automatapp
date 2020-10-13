@@ -42,18 +42,20 @@ int Graph::add_edge(unsigned int i_node, unsigned int j_node, string value)
     return ret;
 }
 
-int Graph::edge_pair(unsigned int i_node, string value)
+vector<int> Graph::edge_pair(unsigned int i_node, string value)
 {
-    int j_node = -1;
+    vector<int> j_nodes;
     list<pair<unsigned int, string>>::iterator it;
     list<pair<unsigned int, string>> tmp = this->graph[i_node];
     it = find_if(tmp.begin(), tmp.end(), edge_value(value));
-    cout << "Transição: " << (*it).first << endl;
-    if(it != tmp.end())
+    while(it != tmp.end())
     {
-        j_node = (*it).first;
+        cout << "Transição: " << (*it).first << endl;
+        j_nodes.push_back((*it).first);
+        it++;
+        it = find_if(it, tmp.end(), edge_value(value)); // Find transition in adjacent list
     }
-    return j_node;
+    return j_nodes;
 }
 
 void Graph::print_all_edges()
