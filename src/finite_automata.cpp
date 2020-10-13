@@ -60,34 +60,59 @@ int FiniteAutomata::add_initial_state(unsigned int state)
 
 bool FiniteAutomata::check_string(string value)
 {
-    int i_node = -1, j_node = -1;
+    int i_node = -1;
     bool status = false;
-    string current_symbol = "", bkp_value = value;
+    string bkp_value = value;
     unordered_set<unsigned int>::iterator initial_state;
     // cout << "Current symbols: " << endl;
-    for(initial_state = this->initial_states.begin(); initial_state != this->initial_states.end(); initial_state++)
+    for(initial_state = this->initial_states.begin(); (initial_state != this->initial_states.end()) && (status != true); initial_state++)
     {
         i_node = (*initial_state);
-        while(value.size() > 0 && status != true) // While have symbols to process
+        status = this->check_paths(i_node, value);
+        value = bkp_value;
+    }
+    return status;
+}
+
+bool FiniteAutomata::check_paths(unsigned int i_node, string value)
+{
+    string current_symbol;
+    vector<int> j_nodes;
+    bool status = false;
+    // cout << "string value: " << value << endl;
+    if(value.compare("") != 0)
+    {
+        while((value.size()) > 0 && (status != true)) // While have symbols to process
         {
             /* Get the next symbol on string */
             current_symbol = get_next_symbol(this->terminal_symbols, value);
-            // Finds the next state on the automata
-            j_node = this->transitions.edge_pair(i_node, current_symbol);
-            if(j_node != -1)
+            // Finds the next states on the automata
+            j_nodes = this->transitions.edge_pair(i_node, current_symbol);
+            if(j_nodes.size() > 0)
             {
-                i_node = j_node;
+                if(j_nodes.size() > 1)
+                {
+                    for(vector<int>::iterator it = j_nodes.begin(); (it != j_nodes.end()) && (status != true); it++)
+                    {
+                        status = this->check_paths((*it), value);
+                    }
+                }
+                else 
+                {
+                    i_node = j_nodes[0];
+                }
             }
             else 
             {
                 break;
             }
         }
-        if(this->final_states.find(j_node) != this->final_states.end())
+
+        /* At the end, checks if the reached state is an final state */
+        if(this->final_states.find(i_node) != this->final_states.end())
         {
             status = true;
         }
-        value = bkp_value;
     }
     return status;
 }
