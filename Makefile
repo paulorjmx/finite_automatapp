@@ -19,7 +19,7 @@ main: main.o graph.o finite_automata.o
 
 run: main
 	@echo "Running the program..."
-	@$(BIN_DIR)/main
+	@$(BIN_DIR)/main < $(FILE)
 
 clean:
 	rm $(OBJ_DIR)/*.o
