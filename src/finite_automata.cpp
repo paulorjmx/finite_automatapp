@@ -35,14 +35,6 @@ FiniteAutomata::FiniteAutomata(unordered_set<string> terminal_alphabet,
     this->transitions = transitions;
     this->initial_states = initial_states;
     this->final_states = final_states;
-    for(unsigned int element : this->initial_states)
-    {
-        if(this->final_states.count(element) > 0)
-        {
-            terminal_alphabet.insert("-");
-            this->transitions.add_edge(element, element, "-");
-        }
-    }
     this->terminal_symbols = terminal_alphabet;
 }
 
@@ -56,11 +48,6 @@ int FiniteAutomata::add_final_state(unsigned int state)
     int status = -1;
     if(this->final_states.size() < this->num_states)
     {
-        unordered_set<unsigned int>::iterator it = find(this->initial_states.begin(), this->initial_states.end(), state);
-        if(it != this->initial_states.end())
-        {
-            this->transitions.add_edge((*it), (*it), "-");
-        }
         this->final_states.emplace(state);
         status = 0;
     }
@@ -84,13 +71,26 @@ bool FiniteAutomata::check_string(string value)
     bool status = false;
     string bkp_value = value;
     unordered_set<unsigned int>::iterator initial_state;
-    // cout << "Current symbols: " << endl;
+    // cout << "Current symbols: " << value << endl;
     
-    for(initial_state = this->initial_states.begin(); (initial_state != this->initial_states.end()) && (status != true); initial_state++)
+    if(value.compare("-") == 0) // Empty string test
     {
-        i_node = (*initial_state);
-        status = this->check_paths(i_node, value);
-        value = bkp_value;
+        for(unsigned int element : this->initial_states)
+        {
+            if(this->final_states.count(element) > 0)
+            {
+                status = true;
+            }
+        }
+    }
+    else 
+    {
+        for(initial_state = this->initial_states.begin(); (initial_state != this->initial_states.end()) && (status != true); initial_state++)
+        {
+            i_node = (*initial_state);
+            status = this->check_paths(i_node, value);
+            value = bkp_value;
+        }
     }
     return status;
 }
@@ -100,7 +100,6 @@ bool FiniteAutomata::check_paths(unsigned int i_node, string value)
     string current_symbol;
     vector<int> j_nodes;
     bool status = false;
-    // cout << "string value: " << value << endl;
     if(value.compare("") != 0)
     {
         while((value.size()) > 0 && (status != true)) // While have symbols to process
