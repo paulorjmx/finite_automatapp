@@ -13,22 +13,37 @@ FiniteAutomata::FiniteAutomata(unsigned int num_states,
                                unordered_set<unsigned int> final_states)
 {
     this->num_states = num_states;
-    this->terminal_symbols = terminal_alphabet;
     this->initial_states = initial_states;
     this->final_states = final_states;
+    for(unsigned int element : this->initial_states)
+    {
+        if(this->final_states.count(element) > 0)
+        {
+            terminal_alphabet.insert("-");
+            this->transitions.add_edge(element, element, "-");
+        }
+    }
+    this->terminal_symbols = terminal_alphabet;
 }
 
-FiniteAutomata::FiniteAutomata(unsigned int num_states, 
-                               unordered_set<string> terminal_alphabet, 
+FiniteAutomata::FiniteAutomata(unordered_set<string> terminal_alphabet, 
                                Graph transitions, 
                                unordered_set<unsigned int> initial_states, 
                                unordered_set<unsigned int> final_states)
 {
-    this->num_states = num_states;
-    this->terminal_symbols = terminal_alphabet;
+    this->num_states = transitions.nodes_qt();
     this->transitions = transitions;
     this->initial_states = initial_states;
     this->final_states = final_states;
+    for(unsigned int element : this->initial_states)
+    {
+        if(this->final_states.count(element) > 0)
+        {
+            terminal_alphabet.insert("-");
+            this->transitions.add_edge(element, element, "-");
+        }
+    }
+    this->terminal_symbols = terminal_alphabet;
 }
 
 int FiniteAutomata::add_transition(unsigned int f_state, unsigned int s_state, string value)
@@ -41,6 +56,11 @@ int FiniteAutomata::add_final_state(unsigned int state)
     int status = -1;
     if(this->final_states.size() < this->num_states)
     {
+        unordered_set<unsigned int>::iterator it = find(this->initial_states.begin(), this->initial_states.end(), state);
+        if(it != this->initial_states.end())
+        {
+            this->transitions.add_edge((*it), (*it), "-");
+        }
         this->final_states.emplace(state);
         status = 0;
     }
@@ -65,6 +85,7 @@ bool FiniteAutomata::check_string(string value)
     string bkp_value = value;
     unordered_set<unsigned int>::iterator initial_state;
     // cout << "Current symbols: " << endl;
+    
     for(initial_state = this->initial_states.begin(); (initial_state != this->initial_states.end()) && (status != true); initial_state++)
     {
         i_node = (*initial_state);
@@ -94,6 +115,7 @@ bool FiniteAutomata::check_paths(unsigned int i_node, string value)
                 {
                     for(vector<int>::iterator it = j_nodes.begin(); (it != j_nodes.end()) && (status != true); it++)
                     {
+                        cout << "Transition for state: " << *it << ", with symbol: " << current_symbol <<  endl;
                         status = this->check_paths((*it), value);
                     }
                 }
@@ -107,12 +129,11 @@ bool FiniteAutomata::check_paths(unsigned int i_node, string value)
                 break;
             }
         }
-
-        /* At the end, checks if the reached state is an final state */
-        if(this->final_states.find(i_node) != this->final_states.end())
-        {
-            status = true;
-        }
+    }
+    /* At the end, checks if the reached state is an final state */
+    if(this->final_states.find(i_node) != this->final_states.end())
+    {
+        status = true;
     }
     return status;
 }
