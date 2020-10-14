@@ -50,7 +50,7 @@ vector<int> Graph::edge_pair(unsigned int i_node, string value)
     it = find_if(tmp.begin(), tmp.end(), edge_value(value));
     while(it != tmp.end())
     {
-        cout << "Transição: " << (*it).first << endl;
+        // cout << "Transição: " << (*it).first << endl;
         j_nodes.push_back((*it).first);
         it++;
         it = find_if(it, tmp.end(), edge_value(value)); // Find transition in adjacent list
