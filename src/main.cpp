@@ -1,3 +1,13 @@
+/********************************************/
+/*                                          */
+/*                                          */
+/*      Nome: Paulo Ricardo J. Miranda      */
+/*      N USP: 10133456                     */
+/*                                          */
+/*                                          */
+/********************************************/
+
+
 #include <inc/finite_automata.hpp>
 #include <inc/graph.hpp>
 #include <unordered_set>
@@ -7,38 +17,54 @@
 using namespace std;
  
  
- int main(int argc, char const *argv[])
- {
+int main(int argc, char const *argv[])
+{
+    unsigned int num_states = 0, num_terminal = 0,  num_transistion = 0, num_final_state = 0, 
+                 num_cadeias = 0, init_state = 0, final_state = 0;
 
-    string cadeia = "bab";
+    string terminal_symbol = "", cadeia = "", symbol = "";
     unordered_set<string> terminal_symbols;
     unordered_set<unsigned int> initial_states, final_states;
-    Graph transitions(3);
-    transitions.add_edge(0, 0, "b");
-    transitions.add_edge(0, 1, "a");
-    transitions.add_edge(0, 2, "a");
-    transitions.add_edge(1, 0, "a");
-    transitions.add_edge(1, 1, "a");
-    transitions.add_edge(2, 0, "a");
-    transitions.add_edge(2, 2, "a");
-    transitions.add_edge(2, 1, "b");
-    //  transitions.print_all_edges();
-    // unsigned int j_node = transitions.edge_pair(0, "a");
-    // cout << "0 a " << j_node << endl;
-    initial_states.emplace(0);
-    final_states.emplace(2);
-    // final_states.emplace(0);
-    terminal_symbols.emplace("a");
-    terminal_symbols.emplace("b");
-    FiniteAutomata afd(terminal_symbols, transitions, initial_states, final_states);
-    if(afd.check_string(cadeia) == true)
+    cin >> num_states;
+    cin >> num_terminal;
+    for(int i = 0; i < num_terminal; i++)
     {
-        cout << "aceita" << endl;
+        cin >> terminal_symbol;
+        terminal_symbols.emplace(terminal_symbol);
     }
-    else 
+    cin >> init_state;
+    for(unsigned int i = 0; i < init_state; i++)
     {
-        cout << "rejeita" << endl;
+        initial_states.emplace(i);
     }
+    cin >> num_final_state;
+    for(int i = 0; i < num_final_state; i++)
+    {
+        cin >> final_state;
+        final_states.emplace(final_state);
+    }
+    cin >> num_transistion;
+    Graph transitions(num_transistion);
+    for(int i = 0; i < num_transistion; i++)
+    {
+        cin >> init_state >> symbol >> final_state;
+        transitions.add_edge(init_state, final_state, symbol);
+    }
+    FiniteAutomata fa(terminal_symbols, transitions, initial_states, final_states);
+    cin >> num_cadeias;
+    for(int i = 0; i < num_cadeias; i++)
+    {
+        cin >> cadeia;
+        if(fa.check_string(cadeia) == true)
+        {
+            cout << "aceita" << endl;
+        }
+        else 
+        {
+            cout << "rejeita" << endl;
+        }
+    }
+
     return 0;
- }
+}
  
