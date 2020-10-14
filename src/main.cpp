@@ -44,7 +44,7 @@ int main(int argc, char const *argv[])
         final_states.emplace(final_state);
     }
     cin >> num_transistion;
-    Graph transitions(num_transistion);
+    Graph transitions(num_states);
     for(int i = 0; i < num_transistion; i++)
     {
         cin >> init_state >> symbol >> final_state;
