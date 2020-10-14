@@ -13,7 +13,7 @@
             private:
                 unordered_set<string> terminal_symbols; /* Set of terminal symbols */
                 unordered_set<unsigned int> initial_states, final_states; /* Set that contains initial states and final states of the automata, respectively */
-                unsigned int num_states; /* Cardinality of set of states */
+                size_t num_states; /* Cardinality of set of states */
                 Graph transitions; /* Graph that contains the transitions of the finite automata */
                 bool check_paths(unsigned int i_node, string value);
             
@@ -23,7 +23,7 @@
                 /* Constructs an automata with particular config */
                 FiniteAutomata(unsigned int num_states, unordered_set<string> terminal_alphabet, unordered_set<unsigned int> initial_states, unordered_set<unsigned int> final_states);
                 /* Constructs and automata with pre-defined full configurations */
-                FiniteAutomata(unsigned int num_states, unordered_set<string> terminal_alphabet, Graph transitions, unordered_set<unsigned int> initial_states, unordered_set<unsigned int> final_states);
+                FiniteAutomata(unordered_set<string> terminal_alphabet, Graph transitions, unordered_set<unsigned int> initial_states, unordered_set<unsigned int> final_states);
                 /* Add transition from f_state to s_state with in finite automata */
                 int add_transition(unsigned int f_state, unsigned int s_state, string value);
                 /* Add an initial state in initial states set */
