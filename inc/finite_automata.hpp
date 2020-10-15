@@ -15,7 +15,7 @@
                 unordered_set<unsigned int> initial_states, final_states; /* Set that contains initial states and final states of the automata, respectively */
                 size_t num_states; /* Cardinality of set of states */
                 Graph transitions; /* Graph that contains the transitions of the finite automata */
-                bool check_paths(unsigned int i_node, string value);
+                bool check_paths(unsigned int i_node, string value); /* Function to check an path from a node i_node */
             
             public:
                 /* Empty constructor */
