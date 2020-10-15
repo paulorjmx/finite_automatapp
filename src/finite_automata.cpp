@@ -71,7 +71,6 @@ bool FiniteAutomata::check_string(string value)
     bool status = false;
     string bkp_value = value;
     unordered_set<unsigned int>::iterator initial_state;
-    // cout << "Current symbols: " << value << endl;
     
     if(value.compare("-") == 0) // Empty string test
     {
@@ -100,14 +99,12 @@ bool FiniteAutomata::check_paths(unsigned int i_node, string value)
     string current_symbol;
     vector<int> j_nodes;
     bool status = false;
-    // cout << "VALUE: " << value << endl;
     if(value.compare("") != 0)
     {
         while((value.size()) > 0 && (status != true)) // While have symbols to process
         {
             /* Get the next symbol on string */
             current_symbol = get_next_symbol(this->terminal_symbols, value);
-            // cout << "CUREN " << current_symbol << endl;
             // Finds the next states on the automata
             j_nodes = this->transitions.edge_pair(i_node, current_symbol);
             if(j_nodes.size() > 0)
@@ -116,9 +113,7 @@ bool FiniteAutomata::check_paths(unsigned int i_node, string value)
                 {
                     for(vector<int>::iterator it = j_nodes.begin(); (it != j_nodes.end()) && (status != true); it++)
                     {
-                        // cout << "Transition for state: " << *it << ", with symbol: " << current_symbol <<  endl;
                         status = this->check_paths((*it), value);
-                        // cout << status << endl;
                     }
                     if(status != true)
                     {
@@ -128,7 +123,6 @@ bool FiniteAutomata::check_paths(unsigned int i_node, string value)
                 else 
                 {
                     i_node = j_nodes[0];
-                    // cout << "Next state: " << i_node << ", with " <<current_symbol << endl;
                 }
             }
             else 
@@ -141,7 +135,6 @@ bool FiniteAutomata::check_paths(unsigned int i_node, string value)
     /* At the end, checks if the reached state is an final state */
     if(this->final_states.find(i_node) != this->final_states.end())
     {
-        // cout << "TESTE " << i_node << endl;
         status = true;
     }
     return status;
