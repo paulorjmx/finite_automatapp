@@ -2,7 +2,8 @@
 
 EdgeValue::EdgeValue()
 {
-
+    this->condition = "";
+    this->write_to = "";
 }
 
 EdgeValue::EdgeValue(string condition, string write_to, Command cmd)
