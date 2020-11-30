@@ -29,6 +29,8 @@ Graph::Graph(size_t node_qt)
     this->graph = tmp_graph;
 }
 
+
+// Adds an edge with value "value" in the graph
 int Graph::add_edge(unsigned int i_node, unsigned int j_node, EdgeValue value)
 {
     int ret = -1;
@@ -43,6 +45,11 @@ int Graph::add_edge(unsigned int i_node, unsigned int j_node, EdgeValue value)
     return ret;
 }
 
+
+/*
+    Searches for a node with transition value "value".
+    It uses the find_if and edge_value functor for it.
+*/
 vector<int> Graph::edge_pair(unsigned int i_node, string value)
 {
     vector<int> j_nodes;
@@ -52,6 +59,8 @@ vector<int> Graph::edge_pair(unsigned int i_node, string value)
     return j_nodes;
 }
 
+
+// Prints all nodes and their connections
 void Graph::print_all_edges()
 {
     for(int i = 0; i < this->node_qt; i++)
@@ -63,6 +72,8 @@ void Graph::print_all_edges()
     }
 }
 
+
+// Returns the quantity of nodes in the graph
 size_t Graph::nodes_qt()
 {
     return this->node_qt;
