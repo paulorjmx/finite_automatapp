@@ -8,8 +8,9 @@
 /********************************************/
 
 
-#include <inc/finite_automata.hpp>
+#include <inc/edge_value.hpp>
 #include <inc/graph.hpp>
+#include <inc/turing_machine.hpp>
 #include <unordered_set>
 #include <string>
 #include <iostream>
@@ -19,6 +20,15 @@ using namespace std;
  
 int main(int argc, char const *argv[])
 {
+    Graph g(3);
+    g.add_edge(0, 1, EdgeValue("a", "#", TuringMachine::Command::R));
+    g.add_edge(1, 1, EdgeValue("a", "a", TuringMachine::Command::R));
+    g.add_edge(1, 1, EdgeValue("#", "#", TuringMachine::Command::R));
+    g.add_edge(1, 1, EdgeValue("*", "*", TuringMachine::Command::R));
+    g.add_edge(1, 1, EdgeValue("b", "*", TuringMachine::Command::R));
+    pair<unsigned int, EdgeValue> j = g.edge_pair(0, "a");
+    cout << "Transition to state: " << j.first << endl;
+    cout << "EdgeValue: " << j.second << endl;
     // unsigned int num_states = 0, num_terminal = 0,  num_transistion = 0, num_final_state = 0, 
     //              num_cadeias = 0, init_state = 0, final_state = 0;
 
