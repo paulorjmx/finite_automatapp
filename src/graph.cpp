@@ -50,13 +50,14 @@ int Graph::add_edge(unsigned int i_node, unsigned int j_node, EdgeValue value)
     Searches for a node with transition value "value".
     It uses the find_if and edge_value functor for it.
 */
-vector<int> Graph::edge_pair(unsigned int i_node, string value)
+pair<unsigned int, EdgeValue> Graph::edge_pair(unsigned int i_node, string value)
 {
-    vector<int> j_nodes;
+    pair<unsigned int, EdgeValue> j_node;
     list<pair<unsigned int, EdgeValue>>::iterator it;
     list<pair<unsigned int, EdgeValue>> tmp = this->graph[i_node];
     it = find_if(tmp.begin(), tmp.end(), edge_value(value));
-    return j_nodes;
+    j_node = (*it);
+    return j_node;
 }
 
 
