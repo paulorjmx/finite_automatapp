@@ -7,27 +7,33 @@
         #include <utility>
         #include <algorithm>
         #include <iterator>
-        // #include <inc/edge_value.hpp>
 
         using namespace std;
 
+        /* The Command enum data type represents an command in a Turing Machine. */
         enum Command
         {
             L, R, S
         };
 
-
+        /* 
+            This struct represents an Edge in Graph class.
+            It's serves to a transition in a Turing Machine and have members like
+            condition, symbol that will be write into tape and the command of read/write head.
+        */
         struct Edge
         {
             string condition, write_to;
             Command cmd;
 
+            /* Default constructor */
             Edge()
             {
                 this->condition = "";
                 this->write_to = "";
             }
 
+            /* Initializing constructor */
             Edge(string condition, string write_to, Command cmd)
             {
                 this->condition = condition;
