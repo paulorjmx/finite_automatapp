@@ -33,7 +33,7 @@ int Machine::run()
     return result;
 }
 
-void Machine::set_tape(string new_tape)
+void Machine::change_tape(string new_tape)
 {
     this->tape = "B" +new_tape+ "B";
 }
