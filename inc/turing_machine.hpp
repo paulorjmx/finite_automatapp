@@ -20,8 +20,10 @@
             
             public:
                 // Machine();
-                Machine(size_t num_states, unsigned int final_state, string tape, Graph g);
-                bool check_string(string st);
+                Machine(unsigned int final_state, string tape, Graph g);
+                int run();
+                void set_tape(string new_tape);
+                void print_tape();
 
         };
 #endif
