@@ -4,6 +4,9 @@ SRC_DIR=./src
 OBJ_DIR=./obj
 BIN_DIR=./bin
 
+all: build
+
+build: main
 
 main.o: $(SRC_DIR)/main.cpp
 	$(CC) $(C_FLAGS) $(SRC_DIR)/main.cpp -o $(OBJ_DIR)/main.o
@@ -21,8 +24,8 @@ main: main.o graph.o turing_machine.o
 	$(CC) $(OBJ_DIR)/main.o $(OBJ_DIR)/graph.o $(OBJ_DIR)/turing_machine.o -o $(BIN_DIR)/main
 
 run: main
-	@echo "Running the program..."
-	@$(BIN_DIR)/main
+	# @echo "Running the program..."
+	@$(BIN_DIR)/main $(ARGS)
 
 clean:
 	rm $(OBJ_DIR)/*.o
