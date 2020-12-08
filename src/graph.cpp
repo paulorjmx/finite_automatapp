@@ -56,7 +56,10 @@ pair<unsigned int, Edge> Graph::edge_pair(unsigned int i_node, string value)
     list<pair<unsigned int, Edge>>::iterator it;
     list<pair<unsigned int, Edge>> tmp = this->graph[i_node];
     it = find_if(tmp.begin(), tmp.end(), edge_value(value));
-    j_node = (*it);
+    if(it != tmp.end())
+    {
+        j_node = (*it);
+    }
     return j_node;
 }
 
