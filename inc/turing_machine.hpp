@@ -22,7 +22,7 @@
                 // Machine();
                 Machine(unsigned int final_state, string tape, Graph g);
                 int run();
-                void set_tape(string new_tape);
+                void change_tape(string new_tape);
                 void print_tape();
 
         };
