@@ -13,7 +13,7 @@
         /* The Command enum data type represents an command in a Turing Machine. */
         enum Command
         {
-            L, R, S
+            L = -1, S, R
         };
 
         /* 
