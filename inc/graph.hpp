@@ -44,8 +44,12 @@
             /* Overloading the output stream */
             friend ostream &operator<<(ostream &out, const Edge &e)
             {
+                int index = -1;
                 const string cmd_text[3] = { "L", "R", "S"};
-                out << e.condition << "; " << e.write_to << "; " << cmd_text[e.cmd];
+                if(e.cmd == Command::L) index = 0;
+                if(e.cmd == Command::R) index = 1;
+                if(e.cmd == Command::S) index = 2;
+                out << e.condition << "; " << e.write_to << "; " << cmd_text[index];
                 return out;
             }
         };
