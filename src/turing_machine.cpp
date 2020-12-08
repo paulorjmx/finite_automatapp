@@ -1,9 +1,11 @@
 #include <inc/turing_machine.hpp>
 
-Machine::Machine(unsigned int final_state, string tape, Graph g)
+Machine::Machine(unsigned int final_state, unordered_set<string> term, unordered_set<string> ext, string tape, Graph g)
 {
     this->num_states = g.nodes_qt(); // Total quantity of states
     this->final_state = final_state; // Acceptance state of the machine
+    this->tape_sym = ext;
+    this->alph_sym = term;
     this->tape = "B" +tape+ "B"; // Tape that will be read and write by the head
     this->graph = g; // Graph that contains all transitions and states
     this->rw_head = 1; // Initial position of read/write head
@@ -19,9 +21,16 @@ int Machine::run()
         j_node = this->graph.edge_pair(this->actual_state, this->tape.substr(this->rw_head, 1));
         if(j_node.second.condition != "")
         {
-            this->tape.replace(this->rw_head, 1, j_node.second.write_to);
-            this->rw_head = this->rw_head + j_node.second.cmd;
-            this->actual_state = j_node.first;
+            if(this->tape_sym.count(j_node.second.write_to) > 0)
+            {
+                this->tape.replace(this->rw_head, 1, j_node.second.write_to);
+                this->rw_head = this->rw_head + j_node.second.cmd;
+                this->actual_state = j_node.first;
+            }
+            else 
+            {
+                break;
+            }
         }
         else 
         {

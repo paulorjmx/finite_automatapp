@@ -20,7 +20,7 @@
             
             public:
                 // Machine();
-                Machine(unsigned int final_state, string tape, Graph g);
+                Machine(unsigned int final_state, unordered_set<string> term, unordered_set<string> ext, string tape, Graph g);
                 int run();
                 void change_tape(string new_tape);
                 void print_tape();
