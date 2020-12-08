@@ -9,6 +9,7 @@
 
 
 #include <inc/graph.hpp>
+#include <inc/turing_machine.hpp>
 #include <unordered_set>
 #include <string>
 #include <iostream>
@@ -18,60 +19,96 @@ using namespace std;
  
 int main(int argc, char const *argv[])
 {
-    Graph g(3);
-    g.add_edge(0, 1, Edge("a", "#", Command::R));
-    g.add_edge(1, 1, Edge("a", "a", Command::R));
-    g.add_edge(1, 1, Edge("#", "#", Command::R));
-    g.add_edge(1, 1, Edge("*", "*", Command::R));
-    g.add_edge(1, 1, Edge("b", "*", Command::R));
-    pair<unsigned int, Edge> j = g.edge_pair(0, "a");
-    cout << "Transition to state: " << j.first << endl;
-    cout << "EdgeValue: " << j.second << endl;
-    // unsigned int num_states = 0, num_terminal = 0,  num_transistion = 0, num_final_state = 0, 
-    //              num_cadeias = 0, init_state = 0, final_state = 0;
+    unsigned num_states = 0, num_terminals = 0, num_ext_symbols = 0, final_state = 0, num_transitions = 0, num_strings = 0, k, j;
+    string tmp_terminals, tmp_extended, condition, write_to, command, tape;
+    unordered_set<string> terminals_alph, extended_alph;
+    Command cmd;
 
-    // string terminal_symbol = "", cadeia = "", symbol = "";
-    // unordered_set<string> terminal_symbols;
-    // unordered_set<unsigned int> initial_states, final_states;
-    // cin >> num_states;
-    // cin >> num_terminal;
-    // for(int i = 0; i < num_terminal; i++)
-    // {
-    //     cin >> terminal_symbol;
-    //     terminal_symbols.emplace(terminal_symbol);
-    // }
-    // cin >> init_state;
-    // for(unsigned int i = 0; i < init_state; i++)
-    // {
-    //     initial_states.emplace(i);
-    // }
-    // cin >> num_final_state;
-    // for(int i = 0; i < num_final_state; i++)
-    // {
-    //     cin >> final_state;
-    //     final_states.emplace(final_state);
-    // }
-    // cin >> num_transistion;
-    // Graph transitions(num_states);
-    // for(int i = 0; i < num_transistion; i++)
-    // {
-    //     cin >> init_state >> symbol >> final_state;
-    //     transitions.add_edge(init_state, final_state, symbol);
-    // }
-    // FiniteAutomata fa(terminal_symbols, transitions, initial_states, final_states);
-    // cin >> num_cadeias;
-    // for(int i = 0; i < num_cadeias; i++)
-    // {
-    //     cin >> cadeia;
-    //     if(fa.check_string(cadeia) == true)
-    //     {
-    //         cout << "aceita" << endl;
-    //     }
-    //     else 
-    //     {
-    //         cout << "rejeita" << endl;
-    //     }
-    // }
+    /* Get the total number of states that machine will have */
+    cin >> num_states;
+    Graph g_transitions(num_states);
+
+    /* Get the quantity of terminals symbols */
+    cin >> num_terminals;
+    for(size_t i = 0; i < num_terminals; i++)
+    {
+        cin >> tmp_terminals;
+        terminals_alph.insert(tmp_terminals);
+    }
+
+     /* Get the quantity of extended symbols */
+    cin >> num_ext_symbols;
+    for(size_t i = 0; i < num_ext_symbols; i++)
+    {
+        cin >> tmp_extended;
+        extended_alph.insert(tmp_extended);
+    }
+
+    /* Get the number of acceptance state */
+    cin >> final_state;
+    
+    /* Get the number of transitions */
+    cin >> num_transitions;
+
+    /* Read and store all transitions in a Graph data structure */
+    for(size_t i = 0; i < num_transitions; i++)
+    {
+        /* 
+            The format of the input is: q x q' y D. Will form the following transition:
+                (x; y; D)                 (a; *; R)
+            q -------------> q'       0 -------------> 1
+         */
+        cin >> k;
+        cin >> condition;
+        cin >> j;
+        cin >> write_to;
+        cin >> command;
+        // cout << k << " " << condition << " " << j << " " << write_to << " " << command << endl;
+        if(command == "R")
+        {
+           g_transitions.add_edge(k, j, Edge(condition, write_to, Command::R));
+        }
+        else if(command == "L")
+        {
+            g_transitions.add_edge(k, j, Edge(condition, write_to, Command::L));
+        }
+        else 
+        {
+            g_transitions.add_edge(k, j, Edge(condition, write_to, Command::S));
+        }
+        
+    }
+
+    // g_transitions.print_all_edges();
+    /* Get the number of string that will be tested */
+    cin >> num_strings;
+    cin >> tape;
+    Machine turing_machine(final_state, terminals_alph, extended_alph, tape, g_transitions);
+    
+    if(turing_machine.run() < 0)
+    {
+        cout << "rejeita" << endl;
+    }
+    else 
+    {
+        cout << "aceita" << endl;
+    }
+
+
+    for(size_t i = 0; i < (num_strings - 1); i++)
+    {
+        cin >> tape;
+        turing_machine.change_tape(tape);
+        if(turing_machine.run() < 0)
+        {
+            cout << "rejeita" << endl;
+        }
+        else 
+        {
+            cout << "aceita" << endl;
+        }
+
+    }
 
     return 0;
 }
