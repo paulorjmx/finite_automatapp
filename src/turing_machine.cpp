@@ -28,16 +28,16 @@ int Machine::run()
         j_node = this->graph.edge_pair(this->actual_state, this->tape.substr(this->rw_head, 1));
         if(j_node.second.condition != "")
         {
-            // if(this->tape_sym.count(j_node.second.write_to) > 0)
-            // {
+            if(this->tape_sym.count(j_node.second.write_to) > 0 || this->alph_sym.count(j_node.second.write_to) > 0)
+            {
                 this->tape.replace(this->rw_head, 1, j_node.second.write_to);
                 this->rw_head = this->rw_head + j_node.second.cmd;
                 this->actual_state = j_node.first;
-            // }
-            // else 
-            // {
-                // break;
-            // }
+            }
+            else 
+            {
+                break;
+            }
         }
         else 
         {
